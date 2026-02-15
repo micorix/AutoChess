@@ -1,0 +1,148 @@
+<UserControl x:Class="AutoChess.Views.GameControlsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:svc="clr-namespace:AutoChess.Services"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="260"
+             x:Name="Root">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Cascadia Mono, Consolas, monospace"/>
+        </Style>
+
+        <Style x:Key="TuiGroupBox" TargetType="GroupBox">
+            <Setter Property="BorderBrush" Value="#484848"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="#808080"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GroupBox">
+                        <Grid>
+                            <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="2"
+                                    Padding="{TemplateBinding Padding}"
+                                    Margin="0,8,0,0">
+                                <ContentPresenter Margin="0,4,0,0"/>
+                            </Border>
+                            <Border Background="#0a0a0a" Padding="4,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    Margin="10,0,0,0">
+                                <ContentPresenter ContentSource="Header"/>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="TuiButton" TargetType="Button">
+            <Setter Property="Background" Value="#1e1e1e"/>
+            <Setter Property="Foreground" Value="#fab283"/>
+            <Setter Property="BorderBrush" Value="#484848"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="FontFamily" Value="Cascadia Mono, Consolas, monospace"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="2"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#282828"/>
+                                <Setter Property="BorderBrush" Value="#fab283"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#323232"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="ScrollViewer">
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Border Background="#0a0a0a" Padding="6">
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Top" Margin="0,0,0,12">
+                <TextBlock Text="{x:Static svc:GameStatusManager+UI.AppTitle}"
+                           FontSize="18" FontWeight="Bold"
+                           Foreground="#fab283"
+                           HorizontalAlignment="Left"/>
+                <Border Height="1" Background="#484848" Margin="0,6,0,0"/>
+            </StackPanel>
+
+            <GroupBox DockPanel.Dock="Top" Style="{StaticResource TuiGroupBox}"
+                      DataContext="{Binding GameStatus, ElementName=Root}">
+                <GroupBox.Header>
+                    <TextBlock Text="{x:Static svc:GameStatusManager+UI.GroupGameStatus}"
+                               Foreground="#9d7cd8" FontSize="11" FontWeight="SemiBold"/>
+                </GroupBox.Header>
+                <StackPanel Margin="2">
+                    <TextBlock Text="{Binding TurnText}"
+                               FontSize="13" FontWeight="SemiBold"
+                               Foreground="#eeeeee" Margin="0,0,0,4"/>
+                    <TextBlock Text="{Binding StateText}"
+                               Foreground="#808080" FontSize="11"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox DockPanel.Dock="Top" Style="{StaticResource TuiGroupBox}">
+                <GroupBox.Header>
+                    <TextBlock Text="{x:Static svc:GameStatusManager+UI.GroupControls}"
+                               Foreground="#9d7cd8" FontSize="11" FontWeight="SemiBold"/>
+                </GroupBox.Header>
+                <StackPanel Margin="2">
+                    <Button Content="{x:Static svc:GameStatusManager+UI.ButtonNewGame}"
+                            Style="{StaticResource TuiButton}"
+                            Click="NewGame_Click"/>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Style="{StaticResource TuiGroupBox}" VerticalAlignment="Stretch"
+                      DataContext="{Binding GameLog, ElementName=Root}">
+                <GroupBox.Header>
+                    <TextBlock Text="{x:Static svc:GameStatusManager+UI.GroupHistory}"
+                               Foreground="#9d7cd8" FontSize="11" FontWeight="SemiBold"/>
+                </GroupBox.Header>
+                <Border Background="#141414" CornerRadius="2" Padding="4"
+                        BorderBrush="#3c3c3c" BorderThickness="1">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  x:Name="LogScrollViewer" Margin="0,4,0,4">
+                        <ItemsControl ItemsSource="{Binding Entries}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}"
+                                               FontFamily="Cascadia Mono, Consolas, monospace"
+                                               FontSize="10"
+                                               Foreground="#808080"
+                                               TextWrapping="Wrap"
+                                               Margin="0,1"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+            </GroupBox>
+        </DockPanel>
+    </Border>
+</UserControl>
