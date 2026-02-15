@@ -9,7 +9,7 @@ Aplikacja WPF (.NET 10) pozwalająca na grę z silnikiem Stockfish.
 ### Gotowy release
 
 0. Pobierz plik exe silnika [Stockfish](https://stockfishchess.org/)
-1. Przejdź do zakładki [Releases](https://github.com/micorix/AutoChess) w tym repozytorium
+1. Przejdź do zakładki [Releases](https://github.com/micorix/AutoChess/releases) w tym repozytorium
 2. Pobierz najnowszy plik zip
 3. Rozpakuj archiwum
 4. Uruchom plik AutoChess.exe
